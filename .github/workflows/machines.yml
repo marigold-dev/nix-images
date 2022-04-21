@@ -22,7 +22,6 @@ jobs:
         run: |
           nix build .#virtualbox
           cp -Lr ./result virtualbox
-          rm -rf virtualbox/nix-support
       - name: "Upload virualbox image"
         uses: actions/upload-artifact@v3
         with:
