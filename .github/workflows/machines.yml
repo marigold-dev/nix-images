@@ -19,17 +19,22 @@ jobs:
         run: find . -iname '*.nix' | xargs nix run nixpkgs/nixos-unstable#nixfmt -- --check
       
       - name: "Build virtualbox"
-        run: nix build .#virtualbox
+        run: |
+          nix build .#virtualbox
+          cp -Lr ./result virtualbox
+          rm -rf virtualbox/nix-support
       - name: "Upload virualbox image"
         uses: actions/upload-artifact@v3
         with:
           name: virtualbox
-          path: ./result/
+          path: ./virtualbox/
       
       - name: "Build install iso"
-        run: nix build .#virtualbox
+        run: |
+          nix build .#install-iso
+          cp -Lr ./result/iso install-iso
       - name: "Upload install iso"
         uses: actions/upload-artifact@v3
         with:
-          name: virtualbox
-          path: ./result/
+          name: install-iso
+          path: ./install-iso/
