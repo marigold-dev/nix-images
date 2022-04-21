@@ -1,0 +1,33 @@
+name: "Build images"
+on:
+  push:
+    branches:
+      - main
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - uses: cachix/install-nix-action@v16
+   
+      - name: "Run nix flake check"
+        run: nix flake check
+      - name: "Check nix formatting"
+        run: find . -iname '*.nix' | xargs nix run nixpkgs/nixos-unstable#nixfmt -- --check
+      
+      - name: "Build virtualbox"
+        run: nix build .#virtualbox
+      - name: "Upload virualbox image"
+        uses: actions/upload-artifact@v3
+        with:
+          name: virtualbox
+          path: ./result/
+      
+      - name: "Build install iso"
+        run: nix build .#virtualbox
+      - name: "Upload install iso"
+        uses: actions/upload-artifact@v3
+        with:
+          name: virtualbox
+          path: ./result/
