@@ -21,7 +21,8 @@
     in {
       packages.x86_64-linux = {
         virtualbox = nixos-generators.nixosGenerate {
-          inherit pkgs modules;
+          inherit pkgs;
+          modules = modules ++ [ ./nix/virtualbox.nix ];
           format = "virtualbox";
         };
 
