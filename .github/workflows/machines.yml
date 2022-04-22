@@ -22,18 +22,30 @@ jobs:
         run: |
           nix build .#virtualbox
           cp -Lr ./result virtualbox
-      - name: "Upload virualbox image"
-        uses: actions/upload-artifact@v3
-        with:
-          name: virtualbox
-          path: ./virtualbox/
-      
+
       - name: "Build install iso"
         run: |
           nix build .#install-iso
           cp -Lr ./result/iso install-iso
-      - name: "Upload install iso"
-        uses: actions/upload-artifact@v3
+
+      - name: Set outputs
+        id: vars
+        run: |
+          echo "::set-output name=date::$(date +%Y-%m-%d)"
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Upload virtualbox image to minio
+        uses: 49nord/action-minio-mirror@v1
         with:
-          name: install-iso
-          path: ./install-iso/
+          host: ${{ secrets.ARTIFACT_UPLOAD_HOST }}
+          bucket: ${{ secrets.ARTIFACT_UPLOAD_BUCKET }}
+          src: ./virtualbox/
+          dst: virtualbox-${{ steps.vars.outputs.date }}-${{ steps.vars.outputs.sha_short }}
+
+      - name: Upload install iso to minio
+        uses: 49nord/action-minio-mirror@v1
+        with:
+          host: ${{ secrets.ARTIFACT_UPLOAD_HOST }}
+          bucket: ${{ secrets.ARTIFACT_UPLOAD_BUCKET }}
+          src: ./install-iso/
+          dst: install-iso-${{ steps.vars.outputs.date }}-${{ steps.vars.outputs.sha_short }}
