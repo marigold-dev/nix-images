@@ -55,4 +55,11 @@
   programs.htop.enable = true;
   
   programs.command-not-found.enable = true;
+  
+  # To spice things up
+  home.file."backgrounds" = {
+    source = ./dekstop-backgrounds;
+    recursive = true;
+  };
+  services.random-background.enable = true;
 }
