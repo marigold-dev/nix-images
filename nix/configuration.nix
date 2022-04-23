@@ -7,6 +7,9 @@
   };
   fonts.fonts = with pkgs; [ fira-mono fira-code roboto roboto-mono ];
 
+  # Add globaly available packages. Useful to debug if something breaks. 
+  environment.systemPackages = with pkgs; [ vim curl wget git emacs ];
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave

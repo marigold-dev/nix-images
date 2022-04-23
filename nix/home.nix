@@ -1,5 +1,8 @@
 { pkgs, cfg, ... }:
 {
+  # Most programs are listed here in home.packages,
+  # but some with more complex configurations are enabled
+  # individually below.
   home.packages = with pkgs; [
     # Ocaml tooling
     opam
@@ -8,8 +11,14 @@
     rnix-lsp
     nixpkgs-fmt
 
+    # The one IDE to rule them all...
+    # JK, emacs and vim configs below - have fun
+    vscode-fhs
+
     # useful shell tools to have on hand
     binutils
+    curl
+    wget
     yarn
     openssh
     perf-tools
